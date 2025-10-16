@@ -95,9 +95,16 @@
     - Define public endpoints (/api/auth/**) and protected endpoints
     - _Requirements: 1.1, 1.7, 4.3_
 
+
+
+
+
+
 - [ ] 4. Implement authentication service and controller
   - [ ] 4.1 Create AuthService
     - Implement register method: validate email uniqueness, hash password with BCrypt, save user
+
+
     - Implement login method: authenticate credentials, generate JWT token
     - Handle authentication errors without revealing specific failure reasons
     - _Requirements: 1.1, 1.2, 1.4, 1.5_
