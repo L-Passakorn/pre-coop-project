@@ -12,26 +12,36 @@
   - Create package structure: controller, service, repository, entity, dto, security, exception
   - _Requirements: 4.1, 4.7_
 
-- [ ] 2. Implement database entities and repositories
-  - [ ] 2.1 Create User entity with JPA annotations
+- [x] 2. Implement database entities and repositories
+
+
+  - [x] 2.1 Create User entity with JPA annotations
+
+
     - Write User entity class with fields: id, email, password, fullName, createdAt, updatedAt
     - Add JPA annotations for table mapping, unique constraints, and timestamps
     - Implement relationship with DiaryEntry (OneToMany)
     - _Requirements: 1.1, 4.4_
   
-  - [ ] 2.2 Create DiaryEntry entity with JPA annotations
+  - [x] 2.2 Create DiaryEntry entity with JPA annotations
+
+
     - Write DiaryEntry entity class with fields: id, title, content, entryDate, user, createdAt, updatedAt
     - Add JPA annotations including indexes for performance
     - Implement relationship with User (ManyToOne)
     - _Requirements: 2.1, 2.6, 4.4_
   
-  - [ ] 2.3 Create UserRepository interface
+  - [x] 2.3 Create UserRepository interface
+
+
     - Extend JpaRepository for User entity
     - Add custom query method: findByEmail
     - Add custom query method: existsByEmail
     - _Requirements: 1.1, 1.4_
   
-  - [ ] 2.4 Create DiaryEntryRepository interface
+  - [x] 2.4 Create DiaryEntryRepository interface
+
+
     - Extend JpaRepository for DiaryEntry entity
     - Add custom query methods for search: searchEntries with keyword and date range parameters
     - Add pagination support using Pageable

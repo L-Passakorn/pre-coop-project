@@ -90,6 +90,13 @@
             <scope>test</scope>
         </dependency>
         
+        <!-- H2 Database for Testing -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
         <!-- JUnit (included in spring-boot-starter-test) -->
         <!-- MockMvc (included in spring-boot-starter-test) -->
     </dependencies>
