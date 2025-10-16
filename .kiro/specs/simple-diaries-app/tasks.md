@@ -48,32 +48,46 @@
     - Add method to find entries by user ID
     - _Requirements: 2.2, 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 3. Implement JWT authentication and security configuration
-  - [ ] 3.1 Create JWT utility class
+- [x] 3. Implement JWT authentication and security configuration
+
+
+
+
+  - [x] 3.1 Create JWT utility class
+
+
     - Implement JwtTokenProvider with methods: generateToken, validateToken, getUserIdFromToken
     - Configure JWT secret key and expiration time from environment variables
     - _Requirements: 1.2, 1.6, 1.7_
   
-  - [ ] 3.2 Create authentication DTOs
+  - [x] 3.2 Create authentication DTOs
+
+
     - Write RegisterRequest DTO with email, password, fullName fields
     - Write LoginRequest DTO with email, password fields
     - Write AuthResponse DTO with token, tokenType, expiresIn, user fields
     - Add validation annotations to DTOs
     - _Requirements: 1.1, 1.2, 6.2_
   
-  - [ ] 3.3 Implement UserDetailsService
+  - [x] 3.3 Implement UserDetailsService
+
+
     - Create UserDetailsServiceImpl implementing UserDetailsService
     - Override loadUserByUsername to fetch user from UserRepository
     - Map User entity to Spring Security UserDetails
     - _Requirements: 1.2, 4.3_
   
-  - [ ] 3.4 Create JWT authentication filter
+  - [x] 3.4 Create JWT authentication filter
+
+
     - Implement JwtAuthenticationFilter extending OncePerRequestFilter
     - Extract JWT token from Authorization header
     - Validate token and set authentication in SecurityContext
     - _Requirements: 1.7, 4.3_
   
-  - [ ] 3.5 Configure Spring Security
+  - [x] 3.5 Configure Spring Security
+
+
     - Create SecurityConfig class with @Configuration and @EnableWebSecurity
     - Configure BCrypt password encoder with strength 12
     - Set up security filter chain with JWT filter
