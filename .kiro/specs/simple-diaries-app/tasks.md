@@ -162,8 +162,10 @@
     - Test validation scenarios
     - _Requirements: 7.1, 7.5, 7.6_
 
-- [ ] 6. Implement diary entry controller
-  - [ ] 6.1 Create DiaryEntryController
+- [x] 6. Implement diary entry controller
+
+  - [x] 6.1 Create DiaryEntryController
+
     - Implement POST /api/diary-entries endpoint for creating entries
     - Implement GET /api/diary-entries endpoint for listing user's entries with pagination
     - Implement GET /api/diary-entries/{id} endpoint for fetching single entry
