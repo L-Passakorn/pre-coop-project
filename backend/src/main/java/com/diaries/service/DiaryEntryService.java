@@ -5,11 +5,12 @@ import com.diaries.dto.DiaryEntryDto;
 import com.diaries.dto.UpdateDiaryEntryRequest;
 import com.diaries.entity.DiaryEntry;
 import com.diaries.entity.User;
+import com.diaries.exception.ForbiddenException;
+import com.diaries.exception.ResourceNotFoundException;
 import com.diaries.repository.DiaryEntryRepository;
 import com.diaries.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +40,7 @@ public class DiaryEntryService {
     public DiaryEntryDto createEntry(CreateDiaryEntryRequest request, Long userId) {
         // Get user
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         // Create diary entry
         DiaryEntry entry = new DiaryEntry();
@@ -67,7 +68,7 @@ public class DiaryEntryService {
     public DiaryEntryDto createEntryByEmail(CreateDiaryEntryRequest request, String email) {
         // Get user by email
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         return createEntry(request, user.getId());
     }
@@ -95,7 +96,7 @@ public class DiaryEntryService {
     @Transactional(readOnly = true)
     public Page<DiaryEntryDto> getEntriesByUserEmail(String email, Pageable pageable) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return getEntriesByUser(user.getId(), pageable);
     }
 
@@ -112,11 +113,11 @@ public class DiaryEntryService {
     @Transactional(readOnly = true)
     public DiaryEntryDto getEntryById(Long entryId, Long userId) {
         DiaryEntry entry = diaryEntryRepository.findById(entryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary entry not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Diary entry not found"));
 
         // Verify ownership
         if (!entry.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("You don't have permission to access this diary entry");
+            throw new ForbiddenException("You don't have permission to access this diary entry");
         }
 
         return toDto(entry);
@@ -135,7 +136,7 @@ public class DiaryEntryService {
     @Transactional(readOnly = true)
     public DiaryEntryDto getEntryByIdAndEmail(Long entryId, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return getEntryById(entryId, user.getId());
     }
 
@@ -153,11 +154,11 @@ public class DiaryEntryService {
     @Transactional
     public DiaryEntryDto updateEntry(Long entryId, UpdateDiaryEntryRequest request, Long userId) {
         DiaryEntry entry = diaryEntryRepository.findById(entryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary entry not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Diary entry not found"));
 
         // Verify ownership
         if (!entry.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("You don't have permission to update this diary entry");
+            throw new ForbiddenException("You don't have permission to update this diary entry");
         }
 
         // Update fields if provided
@@ -190,7 +191,7 @@ public class DiaryEntryService {
     @Transactional
     public DiaryEntryDto updateEntryByEmail(Long entryId, UpdateDiaryEntryRequest request, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return updateEntry(entryId, request, user.getId());
     }
 
@@ -206,11 +207,11 @@ public class DiaryEntryService {
     @Transactional
     public void deleteEntry(Long entryId, Long userId) {
         DiaryEntry entry = diaryEntryRepository.findById(entryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary entry not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Diary entry not found"));
 
         // Verify ownership
         if (!entry.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("You don't have permission to delete this diary entry");
+            throw new ForbiddenException("You don't have permission to delete this diary entry");
         }
 
         diaryEntryRepository.delete(entry);
@@ -228,7 +229,7 @@ public class DiaryEntryService {
     @Transactional
     public void deleteEntryByEmail(Long entryId, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         deleteEntry(entryId, user.getId());
     }
 

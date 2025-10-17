@@ -2,6 +2,7 @@ package com.diaries.service;
 
 import com.diaries.dto.DiaryEntryDto;
 import com.diaries.entity.DiaryEntry;
+import com.diaries.exception.ResourceNotFoundException;
 import com.diaries.repository.DiaryEntryRepository;
 import com.diaries.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -48,7 +49,7 @@ public class SearchService {
 
         // Get user ID from email
         Long userId = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"))
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"))
                 .getId();
 
         // If specific date is provided, search for that date only

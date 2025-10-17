@@ -73,7 +73,14 @@ All requests include helpful console messages:
 - **Search by Keyword + Date Range** - Combined filters
 - **Search All (No Filters)** - Returns all entries
 
-### 4. Test Scenarios
+### 4. Error Testing
+- **401 - Missing Token** - Test unauthorized access
+- **404 - Entry Not Found** - Test resource not found
+- **400 - Validation Error** - Test validation failures
+- **401 - Invalid Credentials** - Test bad login
+- **400 - Duplicate Email** - Test duplicate registration
+
+### 5. Test Scenarios
 - **Create Multiple Entries** - Pre-configured requests with different content
   - Happy entry
   - Grateful entry

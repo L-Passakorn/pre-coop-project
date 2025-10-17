@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,16 +37,12 @@ public class DiaryEntryController {
      * @return the created diary entry
      */
     @PostMapping
-    public ResponseEntity<?> createEntry(
+    public ResponseEntity<DiaryEntryDto> createEntry(
             @Valid @RequestBody CreateDiaryEntryRequest request,
             Authentication authentication) {
-        try {
-            String email = authentication.getName();
-            DiaryEntryDto entry = diaryEntryService.createEntryByEmail(request, email);
-            return ResponseEntity.status(HttpStatus.CREATED).body(entry);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        }
+        String email = authentication.getName();
+        DiaryEntryDto entry = diaryEntryService.createEntryByEmail(request, email);
+        return ResponseEntity.status(HttpStatus.CREATED).body(entry);
     }
 
     /**
@@ -77,20 +72,12 @@ public class DiaryEntryController {
      * @return the diary entry
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEntry(
+    public ResponseEntity<DiaryEntryDto> getEntry(
             @PathVariable Long id,
             Authentication authentication) {
-        try {
-            String email = authentication.getName();
-            DiaryEntryDto entry = diaryEntryService.getEntryByIdAndEmail(id, email);
-            return ResponseEntity.ok(entry);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse(e.getMessage()));
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse(e.getMessage()));
-        }
+        String email = authentication.getName();
+        DiaryEntryDto entry = diaryEntryService.getEntryByIdAndEmail(id, email);
+        return ResponseEntity.ok(entry);
     }
 
     /**
@@ -102,21 +89,13 @@ public class DiaryEntryController {
      * @return the updated diary entry
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateEntry(
+    public ResponseEntity<DiaryEntryDto> updateEntry(
             @PathVariable Long id,
             @Valid @RequestBody UpdateDiaryEntryRequest request,
             Authentication authentication) {
-        try {
-            String email = authentication.getName();
-            DiaryEntryDto entry = diaryEntryService.updateEntryByEmail(id, request, email);
-            return ResponseEntity.ok(entry);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse(e.getMessage()));
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse(e.getMessage()));
-        }
+        String email = authentication.getName();
+        DiaryEntryDto entry = diaryEntryService.updateEntryByEmail(id, request, email);
+        return ResponseEntity.ok(entry);
     }
 
     /**
@@ -127,20 +106,12 @@ public class DiaryEntryController {
      * @return no content on success
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEntry(
+    public ResponseEntity<Void> deleteEntry(
             @PathVariable Long id,
             Authentication authentication) {
-        try {
-            String email = authentication.getName();
-            diaryEntryService.deleteEntryByEmail(id, email);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse(e.getMessage()));
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse(e.getMessage()));
-        }
+        String email = authentication.getName();
+        diaryEntryService.deleteEntryByEmail(id, email);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -168,11 +139,5 @@ public class DiaryEntryController {
         Pageable pageable = PageRequest.of(page, size);
         Page<DiaryEntryDto> entries = searchService.search(email, keyword, startDate, endDate, date, pageable);
         return ResponseEntity.ok(entries);
-    }
-
-    /**
-     * Simple error response DTO.
-     */
-    private record ErrorResponse(String message) {
     }
 }
