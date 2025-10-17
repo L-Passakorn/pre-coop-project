@@ -24,6 +24,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public JwtAuthenticationEntryPoint() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule());
+        // Serialize dates as ISO-8601 strings instead of arrays
+        this.objectMapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     @Override
