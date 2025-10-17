@@ -226,11 +226,16 @@
     - Test user data isolation in search
     - _Requirements: 7.1, 7.7_
 
-- [ ] 8. Implement global exception handling
+
+- [x] 8. Implement global exception handling
+
+
   - [ ] 8.1 Create custom exception classes
     - Create ResourceNotFoundException for 404 scenarios
     - Create UnauthorizedException for 401 scenarios
     - Create ForbiddenException for 403 scenarios
+
+
     - _Requirements: 4.6, 6.2, 6.3, 6.6_
   
   - [ ] 8.2 Create GlobalExceptionHandler
