@@ -1,479 +1,855 @@
 {
-  "info": {
-    "name": "Simple Diaries API",
-    "description": "Complete API collection for Simple Diaries application with automatic token management",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080",
-      "type": "string"
-    }
-  ],
-  "item": [
-    {
-      "name": "Authentication",
-      "item": [
-        {
-          "name": "Register User",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "// Save token to environment if registration successful",
-                  "if (pm.response.code === 201) {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.environment.set('token', jsonData.token);",
-                  "    pm.environment.set('username', jsonData.username);",
-                  "    pm.environment.set('email', jsonData.email);",
-                  "    console.log('✅ User registered successfully!');",
-                  "    console.log('Token saved to environment');",
-                  "} else {",
-                  "    console.log('❌ Registration failed');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"fullName\": \"Test User\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "register"]
-            },
-            "description": "Register a new user and automatically save the JWT token"
-          },
-          "response": []
-        },
-        {
-          "name": "Login",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "// Save token to environment if login successful",
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.environment.set('token', jsonData.token);",
-                  "    pm.environment.set('username', jsonData.username);",
-                  "    pm.environment.set('email', jsonData.email);",
-                  "    console.log('✅ Login successful!');",
-                  "    console.log('Token saved to environment');",
-                  "} else {",
-                  "    console.log('❌ Login failed');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "login"]
-            },
-            "description": "Login with existing credentials and automatically save the JWT token"
-          },
-          "response": []
-        }
-      ]
+    "info": {
+        "name": "Simple Diaries API",
+        "description": "Complete API collection for Simple Diaries application with automatic token management",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
-    {
-      "name": "Diary Entries",
-      "item": [
+    "variable": [
         {
-          "name": "Create Diary Entry",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "// Save the created entry ID for future requests",
-                  "if (pm.response.code === 201) {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.environment.set('lastEntryId', jsonData.id);",
-                  "    console.log('✅ Diary entry created successfully!');",
-                  "    console.log('Entry ID: ' + jsonData.id);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"My First Day\",\n  \"content\": \"Today was an amazing day! I started working on a new project and learned so much.\",\n  \"entryDate\": \"2024-10-17\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries"]
-            },
-            "description": "Create a new diary entry. Requires authentication."
-          },
-          "response": []
-        },
+            "key": "baseUrl",
+            "value": "http://localhost:8080",
+            "type": "string"
+        }
+    ],
+    "item": [
         {
-          "name": "Get All Diary Entries",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('✅ Retrieved ' + jsonData.totalElements + ' entries');",
-                  "    console.log('Page: ' + (jsonData.pageable.pageNumber + 1) + ' of ' + jsonData.totalPages);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
+            "name": "Authentication",
+            "item": [
                 {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries?page=0&size=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries"],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "0",
-                  "description": "Page number (0-based)"
+                    "name": "Register User",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "// Save token to environment if registration successful",
+                                    "if (pm.response.code === 201) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set('token', jsonData.token);",
+                                    "    pm.environment.set('username', jsonData.username);",
+                                    "    pm.environment.set('email', jsonData.email);",
+                                    "    console.log('✅ User registered successfully!');",
+                                    "    console.log('Token saved to environment');",
+                                    "} else {",
+                                    "    console.log('❌ Registration failed');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"fullName\": \"Test User\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/auth/register",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "description": "Register a new user and automatically save the JWT token"
+                    },
+                    "response": []
                 },
                 {
-                  "key": "size",
-                  "value": "10",
-                  "description": "Number of items per page"
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "// Save token to environment if login successful",
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set('token', jsonData.token);",
+                                    "    pm.environment.set('username', jsonData.username);",
+                                    "    pm.environment.set('email', jsonData.email);",
+                                    "    console.log('✅ Login successful!');",
+                                    "    console.log('Token saved to environment');",
+                                    "} else {",
+                                    "    console.log('❌ Login failed');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Login with existing credentials and automatically save the JWT token"
+                    },
+                    "response": []
                 }
-              ]
-            },
-            "description": "Get paginated list of diary entries for the authenticated user"
-          },
-          "response": []
+            ]
         },
         {
-          "name": "Get Diary Entry by ID",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('✅ Retrieved entry: ' + jsonData.title);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
+            "name": "Diary Entries",
+            "item": [
                 {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
+                    "name": "Create Diary Entry",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "// Save the created entry ID for future requests",
+                                    "if (pm.response.code === 201) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set('lastEntryId', jsonData.id);",
+                                    "    console.log('✅ Diary entry created successfully!');",
+                                    "    console.log('Entry ID: ' + jsonData.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"My First Day\",\n  \"content\": \"Today was an amazing day! I started working on a new project and learned so much.\",\n  \"entryDate\": \"2024-10-17\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries"
+                            ]
+                        },
+                        "description": "Create a new diary entry. Requires authentication."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Diary Entries",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Retrieved ' + jsonData.totalElements + ' entries');",
+                                    "    console.log('Page: ' + (jsonData.pageable.pageNumber + 1) + ' of ' + jsonData.totalPages);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries?page=0&size=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "0",
+                                    "description": "Page number (0-based)"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of items per page"
+                                }
+                            ]
+                        },
+                        "description": "Get paginated list of diary entries for the authenticated user"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Diary Entry by ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Retrieved entry: ' + jsonData.title);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/{{lastEntryId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "{{lastEntryId}}"
+                            ]
+                        },
+                        "description": "Get a specific diary entry by ID. Uses the last created entry ID."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Diary Entry",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Entry updated successfully!');",
+                                    "    console.log('Updated title: ' + jsonData.title);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"My First Day - Updated\",\n  \"content\": \"Today was an amazing day! I started working on a new project and learned so much. Update: I also met some great people!\",\n  \"entryDate\": \"2024-10-17\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/{{lastEntryId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "{{lastEntryId}}"
+                            ]
+                        },
+                        "description": "Update an existing diary entry. Uses the last created entry ID."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Diary Entry",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 204) {",
+                                    "    console.log('✅ Entry deleted successfully!');",
+                                    "    pm.environment.unset('lastEntryId');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/{{lastEntryId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "{{lastEntryId}}"
+                            ]
+                        },
+                        "description": "Delete a diary entry. Uses the last created entry ID."
+                    },
+                    "response": []
                 }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries/{{lastEntryId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries", "{{lastEntryId}}"]
-            },
-            "description": "Get a specific diary entry by ID. Uses the last created entry ID."
-          },
-          "response": []
+            ]
         },
         {
-          "name": "Update Diary Entry",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('✅ Entry updated successfully!');",
-                  "    console.log('Updated title: ' + jsonData.title);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
+            "name": "Search & Filter",
+            "item": [
                 {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
+                    "name": "Search by Keyword",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Search returned ' + jsonData.totalElements + ' results');",
+                                    "    console.log('Page: ' + (jsonData.number + 1) + ' of ' + jsonData.totalPages);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/search?keyword=project&page=0&size=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "keyword",
+                                    "value": "project",
+                                    "description": "Search term (searches in title and content)"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "0",
+                                    "description": "Page number (0-based)"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of items per page"
+                                }
+                            ]
+                        },
+                        "description": "Search diary entries by keyword in title or content. Case-insensitive."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Search by Date Range",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Found ' + jsonData.totalElements + ' entries in date range');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/search?startDate=2024-10-01&endDate=2024-10-31&page=0&size=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "startDate",
+                                    "value": "2024-10-01",
+                                    "description": "Start date (YYYY-MM-DD)"
+                                },
+                                {
+                                    "key": "endDate",
+                                    "value": "2024-10-31",
+                                    "description": "End date (YYYY-MM-DD)"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "0",
+                                    "description": "Page number (0-based)"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of items per page"
+                                }
+                            ]
+                        },
+                        "description": "Find diary entries within a specific date range (inclusive)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Search by Specific Date",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Found ' + jsonData.totalElements + ' entries for this date');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/search?date=2024-10-17&page=0&size=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "date",
+                                    "value": "2024-10-17",
+                                    "description": "Specific date (YYYY-MM-DD)"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "0",
+                                    "description": "Page number (0-based)"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of items per page"
+                                }
+                            ]
+                        },
+                        "description": "Find diary entries for a specific date."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Search by Keyword + Date Range",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Found ' + jsonData.totalElements + ' matching entries');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/search?keyword=project&startDate=2024-10-01&endDate=2024-10-31&page=0&size=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "keyword",
+                                    "value": "project",
+                                    "description": "Search term"
+                                },
+                                {
+                                    "key": "startDate",
+                                    "value": "2024-10-01",
+                                    "description": "Start date (YYYY-MM-DD)"
+                                },
+                                {
+                                    "key": "endDate",
+                                    "value": "2024-10-31",
+                                    "description": "End date (YYYY-MM-DD)"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "0",
+                                    "description": "Page number (0-based)"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of items per page"
+                                }
+                            ]
+                        },
+                        "description": "Search for keyword within a specific date range. Combines both filters."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Search All (No Filters)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    console.log('✅ Retrieved all ' + jsonData.totalElements + ' entries');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries/search?page=0&size=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "0",
+                                    "description": "Page number (0-based)"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of items per page"
+                                }
+                            ]
+                        },
+                        "description": "Search without filters returns all entries (same as GET /api/diary-entries)."
+                    },
+                    "response": []
                 }
-              ]
-            },
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"My First Day - Updated\",\n  \"content\": \"Today was an amazing day! I started working on a new project and learned so much. Update: I also met some great people!\",\n  \"entryDate\": \"2024-10-17\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries/{{lastEntryId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries", "{{lastEntryId}}"]
-            },
-            "description": "Update an existing diary entry. Uses the last created entry ID."
-          },
-          "response": []
+            ]
         },
         {
-          "name": "Delete Diary Entry",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 204) {",
-                  "    console.log('✅ Entry deleted successfully!');",
-                  "    pm.environment.unset('lastEntryId');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
+            "name": "Test Scenarios",
+            "item": [
                 {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
+                    "name": "Create Multiple Entries (Happy)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    console.log('✅ Happy entry created');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Great Achievement\",\n  \"content\": \"I completed my project ahead of schedule! Feeling proud and accomplished.\",\n  \"entryDate\": \"2024-10-16\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Multiple Entries (Grateful)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    console.log('✅ Grateful entry created');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Thankful Thursday\",\n  \"content\": \"Today I'm grateful for my supportive team and the opportunity to learn new things every day.\",\n  \"entryDate\": \"2024-10-15\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Multiple Entries (Peaceful)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    console.log('✅ Peaceful entry created');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Evening Meditation\",\n  \"content\": \"Spent 30 minutes meditating by the window. The sunset was beautiful and I feel so calm.\",\n  \"entryDate\": \"2024-10-14\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/diary-entries",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "diary-entries"
+                            ]
+                        }
+                    },
+                    "response": []
                 }
-              ]
-            },
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries/{{lastEntryId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries", "{{lastEntryId}}"]
-            },
-            "description": "Delete a diary entry. Uses the last created entry ID."
-          },
-          "response": []
+            ]
         }
-      ]
-    },
-    {
-      "name": "Test Scenarios",
-      "item": [
-        {
-          "name": "Create Multiple Entries (Happy)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    console.log('✅ Happy entry created');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Great Achievement\",\n  \"content\": \"I completed my project ahead of schedule! Feeling proud and accomplished.\",\n  \"entryDate\": \"2024-10-16\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Multiple Entries (Grateful)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    console.log('✅ Grateful entry created');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Thankful Thursday\",\n  \"content\": \"Today I'm grateful for my supportive team and the opportunity to learn new things every day.\",\n  \"entryDate\": \"2024-10-15\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Multiple Entries (Peaceful)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    console.log('✅ Peaceful entry created');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Evening Meditation\",\n  \"content\": \"Spent 30 minutes meditating by the window. The sunset was beautiful and I feel so calm.\",\n  \"entryDate\": \"2024-10-14\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/diary-entries",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diary-entries"]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ]
+    ]
 }

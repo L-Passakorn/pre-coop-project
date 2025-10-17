@@ -100,8 +100,10 @@
 
 
 
-- [ ] 4. Implement authentication service and controller
-  - [ ] 4.1 Create AuthService
+- [x] 4. Implement authentication service and controller
+
+  - [x] 4.1 Create AuthService
+
     - Implement register method: validate email uniqueness, hash password with BCrypt, save user
 
 
@@ -109,7 +111,8 @@
     - Handle authentication errors without revealing specific failure reasons
     - _Requirements: 1.1, 1.2, 1.4, 1.5_
   
-  - [ ] 4.2 Create AuthController
+  - [x] 4.2 Create AuthController
+
     - Implement POST /api/auth/register endpoint
     - Implement POST /api/auth/login endpoint
     - Add request validation and error handling
@@ -131,8 +134,10 @@
     - Test JWT token generation and validation
     - _Requirements: 7.1, 7.2, 7.4_
 
-- [ ] 5. Implement diary entry service layer
-  - [ ] 5.1 Create DiaryEntry DTOs
+- [x] 5. Implement diary entry service layer
+
+  - [x] 5.1 Create DiaryEntry DTOs
+
     - Write DiaryEntryDto with all fields for responses
     - Write CreateDiaryEntryRequest with title, content, entryDate
     - Write UpdateDiaryEntryRequest with optional title, content, entryDate
@@ -164,6 +169,7 @@
 
 - [x] 6. Implement diary entry controller
 
+
   - [x] 6.1 Create DiaryEntryController
 
     - Implement POST /api/diary-entries endpoint for creating entries
@@ -182,8 +188,13 @@
     - Test validation error responses
     - _Requirements: 7.2, 7.5, 7.6_
 
-- [ ] 7. Implement search and filter functionality
-  - [ ] 7.1 Enhance DiaryEntryRepository with search methods
+- [x] 7. Implement search and filter functionality
+
+
+
+  - [x] 7.1 Enhance DiaryEntryRepository with search methods
+
+
     - Implement custom query for keyword search in title and content
     - Implement query for date range filtering
     - Implement query for specific date filtering
@@ -191,13 +202,17 @@
     - Ensure all queries filter by user ID for data isolation
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.6_
   
-  - [ ] 7.2 Create SearchService
+  - [x] 7.2 Create SearchService
+
+
     - Implement search method accepting keyword, startDate, endDate, date parameters
     - Handle optional parameters (null checks)
     - Return paginated results
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
   
-  - [ ] 7.3 Add search endpoint to DiaryEntryController
+  - [x] 7.3 Add search endpoint to DiaryEntryController
+
+
     - Implement GET /api/diary-entries/search endpoint
     - Accept query parameters: keyword, startDate, endDate, date, page, size
     - Return paginated search results

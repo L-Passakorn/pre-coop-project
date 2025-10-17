@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.*;
 public class DiaryEntryController {
 
     private final DiaryEntryService diaryEntryService;
+    private final com.diaries.service.SearchService searchService;
 
-    public DiaryEntryController(DiaryEntryService diaryEntryService) {
+    public DiaryEntryController(DiaryEntryService diaryEntryService, com.diaries.service.SearchService searchService) {
         this.diaryEntryService = diaryEntryService;
+        this.searchService = searchService;
     }
 
     /**
@@ -139,6 +141,33 @@ public class DiaryEntryController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ErrorResponse(e.getMessage()));
         }
+    }
+
+    /**
+     * Search diary entries with optional filters.
+     *
+     * @param keyword        optional keyword to search in title and content
+     * @param startDate      optional start date for date range filter (format: YYYY-MM-DD)
+     * @param endDate        optional end date for date range filter (format: YYYY-MM-DD)
+     * @param date           optional specific date filter (format: YYYY-MM-DD)
+     * @param page           page number (default 0)
+     * @param size           page size (default 10)
+     * @param authentication the authenticated user
+     * @return page of matching diary entries
+     */
+    @GetMapping("/search")
+    public ResponseEntity<Page<DiaryEntryDto>> searchEntries(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) java.time.LocalDate startDate,
+            @RequestParam(required = false) java.time.LocalDate endDate,
+            @RequestParam(required = false) java.time.LocalDate date,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Authentication authentication) {
+        String email = authentication.getName();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DiaryEntryDto> entries = searchService.search(email, keyword, startDate, endDate, date, pageable);
+        return ResponseEntity.ok(entries);
     }
 
     /**

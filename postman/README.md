@@ -66,8 +66,15 @@ All requests include helpful console messages:
 - **Update Diary Entry** - Update entry (uses saved ID)
 - **Delete Diary Entry** - Delete entry (uses saved ID)
 
-### 3. Test Scenarios
-- **Create Multiple Entries** - Pre-configured requests with different moods
+### 3. Search & Filter
+- **Search by Keyword** - Search in title and content (case-insensitive)
+- **Search by Date Range** - Find entries between two dates
+- **Search by Specific Date** - Find entries for a specific date
+- **Search by Keyword + Date Range** - Combined filters
+- **Search All (No Filters)** - Returns all entries
+
+### 4. Test Scenarios
+- **Create Multiple Entries** - Pre-configured requests with different content
   - Happy entry
   - Grateful entry
   - Peaceful entry
