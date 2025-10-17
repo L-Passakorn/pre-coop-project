@@ -116,11 +116,18 @@
     - Return appropriate HTTP status codes
     - _Requirements: 1.1, 1.2, 4.2, 4.5_
   
+
+
+
+
+
   - [ ]* 4.3 Write authentication tests
     - Create AuthServiceTest with unit tests for register and login methods
     - Create AuthControllerTest with MockMvc tests for registration and login endpoints
     - Test duplicate email registration scenario
     - Test invalid credentials scenario
+
+
     - Test JWT token generation and validation
     - _Requirements: 7.1, 7.2, 7.4_
 
@@ -132,7 +139,14 @@
     - Add validation annotations
     - _Requirements: 2.6, 6.2_
   
-  - [ ] 5.2 Implement DiaryEntryService
+  - [x] 5.2 Implement DiaryEntryService
+
+
+
+
+
+
+
     - Implement createEntry method: validate input, associate with authenticated user, save entry
     - Implement getEntriesByUser method: fetch paginated entries for authenticated user only
     - Implement getEntryById method: fetch entry and verify ownership

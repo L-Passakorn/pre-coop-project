@@ -35,31 +35,47 @@ A full-stack diary application with user authentication and diary entry manageme
 - Java 21 or higher
 - Maven 3.8+
 - Node.js 18+ or Bun
-- PostgreSQL 17.x
+- Docker & Docker Compose
+- PostgreSQL 17.x (via Docker)
 
-### Backend Setup
+### Quick Start
 
+See [QUICK_START.md](QUICK_START.md) for detailed setup instructions.
+
+**TL;DR:**
 ```bash
+# Start database
+docker-compose up -d
+
+# Start backend
 cd backend
-mvn clean install
-mvn spring-boot:run
-```
+./mvnw spring-boot:run
 
-Backend will run on `http://localhost:8080`
-
-See [backend/README.md](backend/README.md) for more details.
-
-### Frontend Setup
-
-```bash
+# Start frontend (in another terminal)
 cd frontend
 npm install
 npm run dev
 ```
 
-Frontend will run on `http://localhost:3000`
+- Backend: `http://localhost:8080`
+- Frontend: `http://localhost:3000`
 
-See [frontend/README.md](frontend/README.md) for more details.
+### API Testing with Postman
+
+Import the Postman collection for easy API testing:
+
+1. Open Postman
+2. Import `postman/Simple-Diaries-API.postman_collection.json`
+3. Import `postman/Simple-Diaries-Local.postman_environment.json`
+4. Select "Simple Diaries - Local" environment
+5. Start testing!
+
+See [postman/README.md](postman/README.md) for detailed usage guide.
+
+**Features:**
+- ✅ Automatic JWT token management
+- ✅ All CRUD operations for diary entries
+- ✅ Pre-configured test scenarios
 
 ## Features
 

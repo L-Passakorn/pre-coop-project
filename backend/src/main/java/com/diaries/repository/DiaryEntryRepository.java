@@ -28,6 +28,15 @@ public interface DiaryEntryRepository extends JpaRepository<DiaryEntry, Long> {
     Page<DiaryEntry> findByUserId(Long userId, Pageable pageable);
 
     /**
+     * Find all diary entries for a specific user ordered by entry date descending.
+     *
+     * @param userId   the ID of the user
+     * @param pageable pagination information
+     * @return a page of diary entries belonging to the user, ordered by entry date (newest first)
+     */
+    Page<DiaryEntry> findByUserIdOrderByEntryDateDesc(Long userId, Pageable pageable);
+
+    /**
      * Search diary entries by keyword in title or content with date range filtering.
      * The search is case-insensitive and filters by user ID for data isolation.
      *
